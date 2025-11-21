@@ -55,13 +55,15 @@ FX_SYMBOLS = [
     "EUR/USD",
 ]
 
-FRED_SERIES = {
-    "CPIAUCSL": "CPI",
-    "PCEPILFE": "CorePCE",
-    "UNRATE": "Unemployment",
-    "GDP": "GDP",
-    "FEDFUNDS": "FedFunds",
-}
+FRED_SERIES = [
+    "CPIAUCSL",
+    "PCEPILFE",
+    "UNRATE",
+    "GDP",
+    "FEDFUNDS",
+    "DGS2",
+    "DGS10",
+]
 
 
 # ------------------------------------------------------------
