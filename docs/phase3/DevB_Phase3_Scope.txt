@@ -1,0 +1,28 @@
+Slice Phase 3 – Dev B Responsibilities (Risk, Analytics & Scenario Engine)
+This document defines the scope, responsibilities, and interfaces for Developer B, responsible for risk
+analytics, factor models, and scenario engine in Phase 3.
+ROLE OVERVIEW:
+Dev B consumes Dev A outputs and transforms them into portfolio analytics, risk diagnostics, and
+scenario simulations.
+SCOPE OF WORK:
+1. Portfolio Aggregation & Risk Engine
+- Combine asset/strategy returns into a unified portfolio return series.
+- Compute volatility, Sharpe, drawdown, rolling metrics.
+2. Correlation & Factor Analysis
+- Correlation matrices for assets/strategies.
+- Factor regressions using statsmodels OLS.
+3. Scenario Engine
+- Build linear sensitivity shock model.
+- Estimate P&L; impact per asset and aggregated portfolio.
+- Output ScenarioResultJSON.
+4. Risk Rails
+Implement:
+- concentration screens
+- correlation clustering flags
+- VaR (historical)
+- regime-based warnings
+5. Interfaces
+
+Primary output: RiskReportJSON.
+NOTES:
+Dev B must not call Backtrader. All work begins at BacktestResultJSON.
