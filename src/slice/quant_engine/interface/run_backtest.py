@@ -1,11 +1,13 @@
 # src/slice/quant_engine/interface/run_backtest.py
 
 from __future__ import annotations
+from datetime import datetime
 
 import json
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional, Type
 
 import backtrader as bt
+import pandas as pd
 
 from slice.quant_engine.core.cerebro import run_cerebro
 from slice.quant_engine.data.loader import load_price_data
@@ -13,6 +15,7 @@ from slice.quant_engine.strategies.gold_real_yields import GoldRealYieldsStrateg
 from slice.quant_engine.strategies.usd_divergence import USDDivergenceStrategy
 from slice.quant_engine.strategies.curve_steepener import CurveSteepenerStrategy
 from slice.quant_engine.strategies.strategy_base import StrategyBase
+from slice.risk.schemas import TimeSeriesPoint, StrategyReturnSeries, BacktestResult
 
 # ---------- 1. Registry + placeholder strategy ----------
 
@@ -53,7 +56,7 @@ def _resolve_strategy(strategy_id: str) -> Type[StrategyBase]:
 
 # ---------- 2. Stub for run_backtest (we'll fill this next) ----------
 
-def run_backtest(strategy_id: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def run_backtest(strategy_id: str, params: Optional[Dict[str, Any]] = None) -> BacktestResult:
     """
     Phase 3 backtest interface.
 
@@ -166,6 +169,33 @@ def run_backtest(strategy_id: str, params: Optional[Dict[str, Any]] = None) -> D
 
         returns_series.append({"date": date_str, "return": float(value)})
 
+    returns_points: List[TimeSeriesPoint] = [
+        TimeSeriesPoint(
+            date=datetime.fromisoformat(entry["date"]).date(),
+            value=float(entry["return"]),
+        )
+        for entry in returns_series
+    ]
+
+    strategy_series = StrategyReturnSeries(
+        strategy_id=strategy_id,
+        frequency="D",
+        returns=returns_points,
+    )
+
+    if returns_points:
+        start_date = returns_points[0].date
+        end_date = returns_points[-1].date
+        backtest_id = f"{strategy_id}_{start_date}_{end_date}"
+    else:
+        backtest_id = f"{strategy_id}_EMPTY"
+
+    backtest = BacktestResult(
+        backtest_id=backtest_id,
+        frequency="D",
+        strategies=[strategy_series],
+    )
+
     # ===================== Metrics =====================
     sharpe_raw = analyzers["sharpe"].get_analysis().get("sharperatio", None)
 
@@ -228,4 +258,4 @@ def run_backtest(strategy_id: str, params: Optional[Dict[str, Any]] = None) -> D
         "trades": trades,
     }
 
-    return result
+    return backtest
