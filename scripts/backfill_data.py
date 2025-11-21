@@ -48,6 +48,7 @@ ETF_SYMBOLS = [
     "SGOV", "IEF", "TLT", "TBF",
     "RINF",
     "GLD", "XLE",
+    "UUP",
 ]
 
 FX_SYMBOLS = [
@@ -83,20 +84,21 @@ def fetch_twelvedata_daily(symbol: str, api_key: str) -> pd.DataFrame | None:
             return None
 
         df = pd.DataFrame(js["values"])
-        df["datetime"] = pd.to_datetime(df["datetime"]).dt.date
-        df = df.rename(columns={
-            "datetime": "date",
-            "open": "open",
-            "high": "high",
-            "low": "low",
-            "close": "close",
-            "volume": "volume",
-        })
-        df["open"] = df["open"].astype(float)
-        df["high"] = df["high"].astype(float)
-        df["low"] = df["low"].astype(float)
-        df["close"] = df["close"].astype(float)
-        df["volume"] = df["volume"].astype(float)
+        if df.empty:
+            print(f"[TD] Empty values for {symbol}")
+            return None
+
+        # Normalize datetime → date
+        df["date"] = pd.to_datetime(df["datetime"]).dt.date
+
+        # Some instruments (FX) may not have volume
+        if "volume" not in df.columns:
+            df["volume"] = None
+
+        # Coerce numeric columns where present
+        for col in ["open", "high", "low", "close", "volume"]:
+            if col in df.columns:
+                df[col] = pd.to_numeric(df[col], errors="coerce")
 
         df["ticker"] = symbol
         return df[["ticker", "date", "open", "high", "low", "close", "volume"]]

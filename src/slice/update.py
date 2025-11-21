@@ -19,7 +19,7 @@ def fetch_twelvedata_incremental(symbol: str, api_key: str, start_date: date) ->
     """
     Fetch daily data for `symbol` from TwelveData starting at `start_date`.
 
-    Returns a DataFrame with columns:
+    Returns a DataFrame with:
       ticker, date, open, high, low, close, volume
     or None on error / no data.
     """
@@ -46,17 +46,10 @@ def fetch_twelvedata_incremental(symbol: str, api_key: str, start_date: date) ->
             return None
 
         df["date"] = pd.to_datetime(df["datetime"]).dt.date
-        df = df.rename(
-            columns={
-                "open": "open",
-                "high": "high",
-                "low": "low",
-                "close": "close",
-                "volume": "volume",
-            }
-        )
 
-        # Coerce numeric
+        if "volume" not in df.columns:
+            df["volume"] = None
+
         for col in ["open", "high", "low", "close", "volume"]:
             if col in df.columns:
                 df[col] = pd.to_numeric(df[col], errors="coerce")
@@ -100,6 +93,8 @@ def update_daily_prices() -> None:
         "RINF",
         "GLD",
         "XLE",
+        "UUP",
+        "EUR/USD",
         # FX / more ETFs can be added later
     ]
 

@@ -14,17 +14,18 @@ from .config import load_settings
 _ENGINE: Optional[Engine] = None
 
 
-def get_engine() -> Engine:
+def get_engine(db_url: Optional[str] = None) -> Engine:
     """
     Return a singleton SQLAlchemy engine for the Slice database.
 
-    Phase 2: used by init_db and later by ETL scripts.
+    If db_url is provided, it is used on first initialization; subsequent calls
+    reuse the existing engine.
     """
     global _ENGINE
     if _ENGINE is None:
-        settings = load_settings()
+        url = db_url or load_settings().db.url
         _ENGINE = create_engine(
-            settings.db.url,
+            url,
             future=True,
             pool_pre_ping=True,
         )
