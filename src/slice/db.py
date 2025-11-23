@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 from typing import Optional, List
 
@@ -121,3 +122,25 @@ def get_last_macro_date(engine, series_id: str):
     with engine.connect() as conn:
         result = conn.execute(text(sql), {"sid": series_id}).scalar()
     return result
+
+def apply_phase4_schema() -> None:
+    """
+    Apply the Phase 4 schema for thesis/observation/trade/scenario.
+
+    This reads sql/phase4_schema.sql and executes it statement-by-statement,
+    using the same splitting/clean execution method as apply_schema().
+    """
+    # Determine path relative to project root
+    project_root = Path(__file__).resolve().parents[2]
+    schema_path = project_root / "sql" / "phase4_schema.sql"
+
+    if not schema_path.exists():
+        raise FileNotFoundError(f"Phase 4 schema file not found: {schema_path}")
+
+    sql_text = schema_path.read_text(encoding="utf-8")
+    stmts = _split_sql_statements(sql_text)
+
+    engine = get_engine()
+    with engine.begin() as conn:
+        for stmt in stmts:
+            conn.execute(text(stmt))
