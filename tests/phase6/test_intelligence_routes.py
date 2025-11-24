@@ -1,4 +1,5 @@
 import pytest
+from typing import Optional
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
@@ -17,7 +18,7 @@ class FakeThesisReviewer:
         *,
         include_memory: bool,
         include_risk: bool,
-        extra_instructions: str | None,
+        extra_instructions: Optional[str],
     ) -> SessionResponse:
         self.last_args = {
             "thesis_id": thesis_id,
@@ -42,7 +43,7 @@ class FakeConsistencyChecker:
         *,
         include_memory: bool,
         include_risk: bool,
-        extra_instructions: str | None,
+        extra_instructions: Optional[str],
     ) -> SessionResponse:
         self.last_args = {
             "include_memory": include_memory,
@@ -68,7 +69,7 @@ class FakeIntuitionEngine:
         k: int,
         include_memory: bool,
         include_risk: bool,
-        extra_instructions: str | None,
+        extra_instructions: Optional[str],
     ) -> SessionResponse:
         self.last_args = {
             "question": question,
@@ -95,7 +96,7 @@ class FakeCommentaryEngine:
         *,
         include_memory: bool,
         include_risk: bool,
-        extra_instructions: str | None,
+        extra_instructions: Optional[str],
     ) -> SessionResponse:
         self.last_daily_args = {
             "include_memory": include_memory,
@@ -112,10 +113,10 @@ class FakeCommentaryEngine:
     async def generate_weekly(
         self,
         *,
-        week_label: str | None,
+        week_label: Optional[str],
         include_memory: bool,
         include_risk: bool,
-        extra_instructions: str | None,
+        extra_instructions: Optional[str],
     ) -> SessionResponse:
         self.last_weekly_args = {
             "week_label": week_label,

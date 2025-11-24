@@ -1,4 +1,5 @@
 import pytest
+from typing import Optional, List
 
 from slice.intelligence.context.context_builder import ContextBuilder
 
@@ -12,7 +13,7 @@ class StubThesis:
 
 
 class StubObservation:
-    def __init__(self, obs_id: int, thesis_id: int | None = None):
+    def __init__(self, obs_id: int, thesis_id: Optional[int] = None):
         self.obs_id = obs_id
         self.thesis_id = thesis_id
 
@@ -43,11 +44,11 @@ class DummyDataAccess:
 
     def __init__(
         self,
-        thesis: StubThesis | None = None,
-        theses: list[StubThesis] | None = None,
-        observations_for_thesis: list[StubObservation] | None = None,
-        recent_observations: list[StubObservation] | None = None,
-        risk_snapshot: StubRiskSnapshot | None = None,
+        thesis: Optional[StubThesis] = None,
+        theses: Optional[List[StubThesis]] = None,
+        observations_for_thesis: Optional[List[StubObservation]] = None,
+        recent_observations: Optional[List[StubObservation]] = None,
+        risk_snapshot: Optional[StubRiskSnapshot] = None,
     ):
         self._thesis = thesis
         self._theses = theses or []
@@ -55,7 +56,6 @@ class DummyDataAccess:
         self._recent_obs = recent_observations or []
         self._risk = risk_snapshot
 
-        # call counters (optional, but nice to have)
         self.calls = {
             "get_thesis": 0,
             "get_all_theses": 0,
@@ -78,7 +78,6 @@ class DummyDataAccess:
 
     def get_recent_observations(self, limit: int = 10):
         self.calls["get_recent_observations"] += 1
-        # ignore limit; this is just a stub
         return self._recent_obs
 
     def get_risk_snapshot(self):
@@ -105,7 +104,6 @@ def test_build_thesis_context_success():
     assert ctx["observations"] == [o.dict() for o in observations]
     assert ctx["risk_snapshot"] == risk.dict()
 
-    # sanity: we actually called the expected DataAccess methods
     assert data_access.calls["get_thesis"] == 1
     assert data_access.calls["get_observations_for_thesis"] == 1
     assert data_access.calls["get_risk_snapshot"] == 1
@@ -119,7 +117,6 @@ def test_build_thesis_context_missing_thesis():
 
     assert ctx == {"error": "thesis_not_found"}
     assert data_access.calls["get_thesis"] == 1
-    # When thesis is missing, builder should not need to hit other calls
     assert data_access.calls["get_observations_for_thesis"] == 0
     assert data_access.calls["get_risk_snapshot"] == 0
 
@@ -150,7 +147,6 @@ def test_build_intuition_context_passthrough():
 
     assert ctx["question"] == question
     assert ctx["recalled_observations"] == recalled
-    # Should not call any DataAccess methods for this helper
     assert all(count == 0 for count in data_access.calls.values())
 
 

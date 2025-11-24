@@ -31,6 +31,17 @@ class OrchestratorClient:
     Phase-6 code MUST call this wrapper instead of SessionOrchestrator directly.
     """
 
+    @classmethod
+    def depends(cls) -> "OrchestratorClient":
+        """
+        FastAPI dependency hook for OrchestratorClient.
+
+        In production wiring, this should be replaced or overridden to return
+        a fully wired OrchestratorClient instance. In tests, this is usually
+        monkeypatched.
+        """
+        raise RuntimeError("OrchestratorClient dependency not wired")
+
     def __init__(self, llm_client: LLMClientProtocol) -> None:
         # Phase 5 orchestrator is created with injected LLM client
         self._orchestrator = SessionOrchestrator(llm_client=llm_client)

@@ -1,9 +1,16 @@
 from typing import Any, Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from slice.session.models import SessionResponse
+from slice.intelligence.context.data_access import DataAccess
+from slice.intelligence.orchestrator_client import OrchestratorClient
+from slice.intelligence.long_horizon import run_long_horizon_analysis
+from slice.intelligence.strategy import run_strategy_recommendation
+from slice.intelligence.portfolio_diagnostics import run_portfolio_diagnostics
+from slice.intelligence.narrative import run_narrative_coherence
+
 
 router = APIRouter(prefix="/api/v1/intel", tags=["intelligence"])
 
@@ -82,6 +89,28 @@ class WeeklyCommentaryRequest(BaseModel):
 
 
 # ----------------------------
+# Phase 7 Request Models
+# ----------------------------
+
+class LongHorizonRequest(BaseModel):
+    thesis_id: int
+    horizon_months: Optional[int] = 12
+
+
+class StrategyRequest(BaseModel):
+    extra_instructions: Optional[str] = None
+
+
+class DiagnosticsRequest(BaseModel):
+    extra_instructions: Optional[str] = None
+
+
+class NarrativeRequest(BaseModel):
+    window_label: Optional[str] = None
+    extra_instructions: Optional[str] = None
+
+
+# ----------------------------
 # Routes
 # ----------------------------
 
@@ -145,5 +174,82 @@ async def weekly_commentary_endpoint(
         week_label=req.week_label,
         include_memory=req.include_memory,
         include_risk=req.include_risk,
+        extra_instructions=req.extra_instructions,
+    )
+
+
+# ----------------------------
+# Phase 7 Routes
+# ----------------------------
+
+@router.post("/horizon", response_model=SessionResponse)
+async def long_horizon_endpoint(
+    req: LongHorizonRequest,
+    data_access: DataAccess = Depends(DataAccess.depends),
+    orchestrator: OrchestratorClient = Depends(OrchestratorClient.depends),
+) -> SessionResponse:
+    """
+    Phase 7: Long-horizon reasoning endpoint.
+    Thin route that delegates entirely to the engine.
+    """
+    try:
+        return await run_long_horizon_analysis(
+            thesis_id=req.thesis_id,
+            horizon_months=req.horizon_months or 12,
+            data_access=data_access,
+            orchestrator=orchestrator,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+@router.post("/strategy", response_model=SessionResponse)
+async def strategy_endpoint(
+    req: StrategyRequest,
+    data_access: DataAccess = Depends(DataAccess.depends),
+    orchestrator: OrchestratorClient = Depends(OrchestratorClient.depends),
+) -> SessionResponse:
+    """
+    Phase 7: Strategy recommendation endpoint.
+    Thin route that delegates to the strategy engine.
+    """
+    return await run_strategy_recommendation(
+        data_access=data_access,
+        orchestrator=orchestrator,
+        extra_instructions=req.extra_instructions,
+    )
+
+
+@router.post("/diagnostics", response_model=SessionResponse)
+async def diagnostics_endpoint(
+    req: DiagnosticsRequest,
+    data_access: DataAccess = Depends(DataAccess.depends),
+    orchestrator: OrchestratorClient = Depends(OrchestratorClient.depends),
+) -> SessionResponse:
+    """
+    Phase 7: Portfolio diagnostics endpoint.
+    Thin route that delegates to the diagnostics engine.
+    """
+    return await run_portfolio_diagnostics(
+        data_access=data_access,
+        orchestrator=orchestrator,
+        extra_instructions=req.extra_instructions,
+    )
+
+
+@router.post("/narrative", response_model=SessionResponse)
+async def narrative_endpoint(
+    req: NarrativeRequest,
+    data_access: DataAccess = Depends(DataAccess.depends),
+    orchestrator: OrchestratorClient = Depends(OrchestratorClient.depends),
+) -> SessionResponse:
+    """
+    Phase 7: Narrative coherence endpoint.
+    Thin route that delegates to the narrative engine.
+    """
+    return await run_narrative_coherence(
+        data_access=data_access,
+        orchestrator=orchestrator,
+        window_label=req.window_label,
         extra_instructions=req.extra_instructions,
     )

@@ -1,5 +1,5 @@
 import json
-from typing import Any
+from typing import Any, Optional
 
 from slice.session.models import SessionResponse
 
@@ -31,7 +31,7 @@ class ThesisConsistencyChecker:
         *,
         include_memory: bool = True,
         include_risk: bool = False,  # default off; cross-thesis risk is not central
-        extra_instructions: str | None = None,
+        extra_instructions: Optional[str] = None,
     ) -> SessionResponse:
         """
         Perform a cross-thesis coherence analysis.

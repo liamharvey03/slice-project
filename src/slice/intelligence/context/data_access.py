@@ -13,6 +13,16 @@ class DataAccess:
     Does NOT call LLMs. Does NOT mutate state.
     """
 
+    @classmethod
+    def depends(cls) -> "DataAccess":
+        """
+        FastAPI dependency hook for DataAccess.
+
+        In production wiring, this should be replaced or overridden to return
+        a fully wired DataAccess instance. In tests, this is usually monkeypatched.
+        """
+        raise RuntimeError("DataAccess dependency not wired")
+
     def __init__(
         self,
         thesis_repo: ThesisRepository,
