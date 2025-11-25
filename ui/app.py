@@ -56,8 +56,17 @@ def render_portfolio_tab():
 
     st.subheader("Portfolio Snapshot")
     if portfolio:
+        # Prefer explicit top-level total_value if present, otherwise fall back
+        # to totals["portfolio_value"] from the portfolio adapter.
+        totals = portfolio.get("totals") or {}
         total_val = portfolio.get("total_value")
-        st.metric("Total Value", f"{total_val:,.2f}" if isinstance(total_val, (int, float)) else total_val)
+        if total_val is None:
+            total_val = totals.get("portfolio_value", 0.0)
+
+        st.metric(
+            "Total Value",
+            f"{total_val:,.2f}" if isinstance(total_val, (int, float)) else total_val,
+        )
 
         positions = portfolio.get("positions", [])
         if positions:
