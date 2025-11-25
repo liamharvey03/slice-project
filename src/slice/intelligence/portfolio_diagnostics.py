@@ -1,59 +1,50 @@
 import json
-from typing import Optional
 
 from slice.intelligence.context.context_builder import ContextBuilder
 from slice.intelligence.context.data_access import DataAccess
-from slice.intelligence.orchestrator_client import OrchestratorClient
-from slice.session.models import SessionResponse
 
 
 async def run_portfolio_diagnostics(
-    *,
     data_access: DataAccess,
-    orchestrator: OrchestratorClient,
+    orchestrator,
     include_memory: bool = False,
     include_risk: bool = True,
-    extra_instructions: Optional[str] = None,
-) -> SessionResponse:
-    risk_profile = data_access.get_risk_snapshot()
-    current_portfolio = {}  # stub; real holdings wiring deferred to Phase 8
+    extra_instructions: str | None = None,
+):
+    """
+    Phase 7-style portfolio diagnostics engine:
 
-    builder = ContextBuilder(data_access=data_access)
-    context = builder.build_portfolio_diagnostics_context(
+    - Uses stubbed empty current_portfolio, factor_exposures, stress_tests,
+      and recent_performance.
+    - Optionally includes a risk snapshot from DataAccess.
+    - Builds 'portfolio_diagnostics_context' via ContextBuilder.
+    - Serializes it as JSON after 'context:\\n'.
+    - Embeds extra_instructions as a JSON field when provided.
+    """
+    risk = data_access.get_risk_snapshot()
+    cb = ContextBuilder(data_access)
+
+    current_portfolio: dict = {}
+    risk_profile = risk.dict() if risk else {}
+    factor_exposures: dict = {}
+    stress_tests: list = []
+    recent_performance: dict = {}
+
+    ctx = cb.build_portfolio_diagnostics_context(
         current_portfolio=current_portfolio,
         risk_profile=risk_profile,
+        factor_exposures=factor_exposures,
+        stress_tests=stress_tests,
+        recent_performance=recent_performance,
     )
 
-    context_json = json.dumps(context, default=str)
+    if extra_instructions is not None:
+        ctx["extra_instructions"] = extra_instructions
 
-    text_parts = [
-        "Phase 7 – Portfolio Diagnostics.",
-        "",
-        "You are analyzing the portfolio's risk and exposure profile.",
-        "Use the context JSON to:",
-        "- summarize key risk concentrations;",
-        "- highlight drawdown or tail risks;",
-        "- identify diversification or correlation issues.",
-    ]
+    user_text = "context:\n" + json.dumps(ctx)
 
-    if extra_instructions:
-        text_parts.append("")
-        text_parts.append("Additional user instructions:")
-        text_parts.append(extra_instructions)
-
-    text_parts.extend(
-        [
-            "",
-            "context:",
-            context_json,
-        ]
-    )
-
-    user_text = "\n".join(text_parts)
-
-    response: SessionResponse = await orchestrator.run_analyst(
-        user_text,
+    return await orchestrator.run_analyst(
+        user_text=user_text,
         include_memory=include_memory,
         include_risk=include_risk,
     )
-    return response

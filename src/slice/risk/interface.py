@@ -1,7 +1,7 @@
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
 
-from src.slice.repositories.trade_repo import TradeRepository
+from slice.repositories.trade_repo import TradeRepository
 
 
 class RiskSnapshot(BaseModel):
