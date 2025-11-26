@@ -1,6 +1,7 @@
 import pytest
 
 from slice.intelligence.context.data_access import DataAccess
+from slice.models.portfolio import PortfolioSnapshot, PortfolioDepthSnapshot
 
 
 # --- Helper fakes -----------------------------------------------------------
@@ -52,14 +53,16 @@ def test_get_current_portfolio_with_no_trades_returns_empty_positions():
 
     portfolio = da.get_current_portfolio()
 
-    assert isinstance(portfolio, dict)
+    assert isinstance(portfolio, PortfolioSnapshot)
+
+    data = portfolio.dict()
 
     # We expect at least these keys based on the Phase 8–9 design and codex scan.
-    assert "positions" in portfolio
-    assert "totals" in portfolio
+    assert "positions" in data
+    assert "totals" in data
 
-    positions = portfolio["positions"]
-    totals = portfolio["totals"]
+    positions = data["positions"]
+    totals = data["totals"]
 
     assert isinstance(positions, list)
     assert positions == [] or len(positions) == 0
@@ -80,12 +83,14 @@ def test_get_portfolio_depth_shape_on_empty_portfolio():
     # Depth may depend on current portfolio and/or theses; we pass an empty list here.
     depth = da.get_portfolio_depth(theses=[])
 
-    assert isinstance(depth, dict)
-    # Shape comes from codex summary: {concentration, factors, thesis_exposures}
-    assert "concentration" in depth
-    assert "factors" in depth
-    assert "thesis_exposures" in depth
+    assert isinstance(depth, PortfolioDepthSnapshot)
 
-    assert isinstance(depth["concentration"], dict)
-    assert isinstance(depth["factors"], dict)
-    assert isinstance(depth["thesis_exposures"], dict)
+    depth_dict = depth.dict()
+    # Shape comes from codex summary: {concentration, factors, thesis_exposures}
+    assert "concentration" in depth_dict
+    assert "factors" in depth_dict
+    assert "thesis_exposures" in depth_dict
+
+    assert isinstance(depth_dict["concentration"], dict)
+    assert isinstance(depth_dict["factors"], dict)
+    assert isinstance(depth_dict["thesis_exposures"], dict)

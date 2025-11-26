@@ -1,16 +1,19 @@
 import json
-from typing import List, Optional
+from typing import List, Optional, Any, Mapping
 
 from sqlalchemy import text
 
 from slice.db import get_engine
 from slice.models.observation import Observation
+from slice.models.common import Sentiment
 
 
 class ObservationRepository:
-    @staticmethod
-    def insert(obs: Observation, embedding_vector: Optional[List[float]] = None) -> None:
-        engine = get_engine()
+    def __init__(self, engine=None):
+        self.engine = engine or get_engine()
+
+    def insert(self, obs: Observation, embedding_vector: Optional[List[float]] = None) -> Observation:
+        engine = self.engine
 
         # --- Convert Pydantic model to params dict ---
         params = obs.dict()
@@ -65,9 +68,28 @@ class ObservationRepository:
         with engine.begin() as conn:
             conn.execute(sql, params)
 
-    @staticmethod
-    def get(obs_id: str) -> Optional[Observation]:
-        engine = get_engine()
+        return obs
+
+    def _row_to_observation(self, row: Mapping[str, Any]) -> Observation:
+        data = dict(row)
+
+        for field in ("categories", "thesis_ref"):
+            if isinstance(data.get(field), str):
+                try:
+                    data[field] = json.loads(data[field])
+                except Exception:
+                    pass
+
+        if isinstance(data.get("sentiment"), str):
+            try:
+                data["sentiment"] = Sentiment(data["sentiment"])
+            except Exception:
+                pass
+
+        return Observation(**data)
+
+    def get_by_id(self, obs_id: str) -> Optional[Observation]:
+        engine = self.engine
         sql = text("SELECT * FROM observation WHERE id = :oid")
 
         with engine.connect() as conn:
@@ -76,14 +98,35 @@ class ObservationRepository:
         if row is None:
             return None
 
-        row = dict(row)
+        return self._row_to_observation(row)
 
-        # categories JSONB → Python list
-        if isinstance(row.get("categories"), str):
-            try:
-                row["categories"] = json.loads(row["categories"])
-            except:
-                pass
+    def get(self, obs_id: str) -> Optional[Observation]:
+        return self.get_by_id(obs_id)
 
-        # embedding we leave as-is (vector type or None)
-        return Observation(**row)
+    def list_for_thesis(self, thesis_id: str) -> List[Observation]:
+        engine = self.engine
+        sql = text("""
+            SELECT * FROM observation
+            WHERE thesis_ref @> :thesis_ref
+            ORDER BY timestamp DESC
+        """)
+
+        thesis_ref = [thesis_id]
+
+        with engine.connect() as conn:
+            rows = conn.execute(sql, {"thesis_ref": thesis_ref}).mappings().fetchall()
+
+        return [self._row_to_observation(r) for r in rows]
+
+    def list_recent(self, limit: int) -> List[Observation]:
+        engine = self.engine
+        sql = text("""
+            SELECT * FROM observation
+            ORDER BY timestamp DESC
+            LIMIT :lim
+        """)
+
+        with engine.connect() as conn:
+            rows = conn.execute(sql, {"lim": limit}).mappings().fetchall()
+
+        return [self._row_to_observation(r) for r in rows]
