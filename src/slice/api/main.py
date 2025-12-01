@@ -5,6 +5,7 @@ from slice.api.session_routes import router as session_router
 from slice.api.intelligence_routes import router as intelligence_router
 from slice.api.memory_app import app as memory_app
 from slice.api.ui_routes import router as ui_router
+from slice.api.diagnostics_routes import router as diagnostics_router
 
 app = FastAPI(title="Slice API", version="0.1")
 
@@ -14,6 +15,9 @@ app.include_router(intelligence_router, prefix="/intelligence", tags=["intellige
 
 # UI-facing APIs
 app.include_router(ui_router, prefix="/ui", tags=["ui"])
+
+# Diagnostics APIs
+app.include_router(diagnostics_router, tags=["diagnostics"])
 
 # Memory app
 app.mount("/memory", memory_app)

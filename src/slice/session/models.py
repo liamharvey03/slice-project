@@ -22,9 +22,14 @@ class SessionOptions(BaseModel):
     risk_for_thesis_id: Optional[str] = None
     risk_for_portfolio_id: Optional[str] = None
 
+    # E3: Pure-function mode flags (skip side effects)
+    skip_ingest: bool = False  # Skip observation ingestion
+    skip_memory: bool = False  # Skip memory retrieval (overrides use_memory)
+    skip_risk: bool = False  # Skip risk snapshot (overrides use_risk)
+
 
 class SessionResponse(BaseModel):
-    observation_id: int
+    observation_id: Optional[int] = None  # None when skip_ingest=True
     llm_response: str
 
     memory_context: Optional[Dict[str, Any]] = None

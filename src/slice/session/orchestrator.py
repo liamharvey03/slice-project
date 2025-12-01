@@ -35,23 +35,27 @@ class SessionOrchestrator:
         # ------------------------------------------------------------
         # 1. INGEST OBSERVATION
         # ------------------------------------------------------------
-        try:
-            ingest_result = self.ingest.ingest_observation_with_embedding(
-                text=text,
-                thesis_ref=None,   # Phase 5 UI doesn’t tie these yet
-                sentiment=None,
-                categories=None,
-            )
-            observation_id = ingest_result.observation_id
-        except Exception:
-            # If ingestion fails entirely, we cannot proceed.
-            # This is the only place where failing hard is correct.
-            raise RuntimeError("Observation ingestion failed")
+        observation_id: Optional[int] = None
+        if not options.skip_ingest:
+            try:
+                ingest_result = self.ingest.ingest_observation_with_embedding(
+                    text=text,
+                    thesis_ref=None,   # Phase 5 UI doesn't tie these yet
+                    sentiment=None,
+                    categories=None,
+                )
+                observation_id = ingest_result.observation_id
+            except Exception:
+                # If ingestion fails entirely, we cannot proceed.
+                # This is the only place where failing hard is correct.
+                raise RuntimeError("Observation ingestion failed")
 
         # ------------------------------------------------------------
         # 2. MEMORY (Dev B wrapper)
         # ------------------------------------------------------------
-        if options.use_memory:
+        if options.skip_memory:
+            memory_ctx = None
+        elif options.use_memory:
             memory_ctx = get_memory_context_for_text(
                 text=text,
                 k=options.max_memory_items,
@@ -62,7 +66,9 @@ class SessionOrchestrator:
         # ------------------------------------------------------------
         # 3. RISK (Dev A)
         # ------------------------------------------------------------
-        if options.use_risk:
+        if options.skip_risk:
+            risk_ctx = None
+        elif options.use_risk:
             snapshot = get_snapshot(
                 thesis_id=options.risk_for_thesis_id,
                 portfolio_id=options.risk_for_portfolio_id,
@@ -100,18 +106,20 @@ class SessionOrchestrator:
         # ------------------------------------------------------------
         # 6. LOGGING (non-blocking, never raises)
         # ------------------------------------------------------------
-        try:
-            log_session_event(
-                observation_id=observation_id,
-                llm_model=self.llm_client.model_name,
-                prompt_tokens=usage.get("prompt_tokens"),
-                completion_tokens=usage.get("completion_tokens"),
-                latency_ms=latency,
-                memory_used=options.use_memory,
-                risk_used=options.use_risk,
-            )
-        except Exception:
-            pass
+        # Only log if we actually ingested (observation_id is not None)
+        if observation_id is not None:
+            try:
+                log_session_event(
+                    observation_id=observation_id,
+                    llm_model=self.llm_client.model_name,
+                    prompt_tokens=usage.get("prompt_tokens"),
+                    completion_tokens=usage.get("completion_tokens"),
+                    latency_ms=latency,
+                    memory_used=options.use_memory and not options.skip_memory,
+                    risk_used=options.use_risk and not options.skip_risk,
+                )
+            except Exception:
+                pass
 
         # ------------------------------------------------------------
         # 7. RETURN STRUCTURED RESPONSE
