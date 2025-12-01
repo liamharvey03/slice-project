@@ -1,7 +1,7 @@
 """
 E3: LLM input context DTOs for tool arguments.
 """
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 
 from pydantic import BaseModel
@@ -16,14 +16,18 @@ class Alert(BaseModel):
     Alert/notification for daily context.
 
     Fields:
-        type: str - Alert type (e.g., "disconfirmer", "trigger")
-        message: str - Alert message text
-        thesis_id: Optional[str] - Associated thesis ID if applicable
+        thesis_id: str - Associated thesis ID
+        thesis_title: str - Thesis title (to avoid extra DB lookups)
+        message: str - Human-readable alert text for UI/LLM
+        observation_id: Optional[str] - Related observation ID if applicable
+        timestamp: datetime - When the alert was generated
     """
 
-    type: str
+    thesis_id: str
+    thesis_title: str
     message: str
-    thesis_id: Optional[str] = None
+    observation_id: Optional[str] = None
+    timestamp: datetime
 
 
 class DailyContext(BaseModel):

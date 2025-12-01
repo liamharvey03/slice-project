@@ -1,7 +1,11 @@
-from typing import Optional, List, Any, Dict, Iterable
+from typing import Optional, List, Any, Dict, Iterable, Tuple
+from datetime import date, datetime
 from slice.repositories.thesis_repo import ThesisRepository
 from slice.repositories.observation_repo import ObservationRepository
 from slice.repositories.trade_repo import TradeRepository
+from slice.repositories.evaluation_repo import EvaluationRepository
+from slice.repositories.alert_repo import AlertRepository
+from slice.repositories.daily_summary_repo import DailySummaryRepository
 from slice.risk.interface import get_snapshot
 from slice.models.thesis import Thesis
 from slice.models.observation import Observation
@@ -11,6 +15,9 @@ from slice.models.portfolio import (
     PortfolioSnapshot,
     PortfolioDepthSnapshot,
 )
+from slice.models.evaluation import ThesisEvaluationResult
+from slice.models.llm_outputs import ThesisReview, DailySummary
+from slice.models.llm_inputs import Alert
 
 
 class DataAccess:
@@ -36,12 +43,18 @@ class DataAccess:
         trade_repo: TradeRepository,
         scenario_repo=None,
         price_source=None,
+        evaluation_repo: Optional[EvaluationRepository] = None,
+        alert_repo: Optional[AlertRepository] = None,
+        daily_summary_repo: Optional[DailySummaryRepository] = None,
     ):
         self.thesis_repo = thesis_repo
         self.obs_repo = obs_repo
         self.trade_repo = trade_repo
         self.scenario_repo = scenario_repo
         self.price_source = price_source
+        self.evaluation_repo = evaluation_repo
+        self.alert_repo = alert_repo
+        self.daily_summary_repo = daily_summary_repo
 
     def get_thesis(self, thesis_id: int | str) -> Optional[Thesis]:
         repo = self.thesis_repo
@@ -77,6 +90,20 @@ class DataAccess:
         if hasattr(repo, "list_recent"):
             return repo.list_recent(limit=100)
         return []
+
+    def get_active_theses(self) -> List[Thesis]:
+        """Return all theses with ACTIVE status.
+        
+        E4 sessions should use this instead of accessing thesis_repo directly.
+        """
+        repo = self.thesis_repo
+
+        if hasattr(repo, "list_active"):
+            return repo.list_active()
+        # Fallback: filter all theses by status
+        from slice.models.common import ThesisStatus
+        all_theses = self.get_all_theses()
+        return [t for t in all_theses if t.status == ThesisStatus.ACTIVE]
 
     def get_observations_for_thesis(self, thesis_id: int | str) -> List[Observation]:
         repo = self.obs_repo
@@ -281,3 +308,144 @@ class DataAccess:
             "scenarios": [],
             "risk_flags": [],
         }
+
+    # -------------------------------------------------------------------------
+    # E4: Persistence methods for evaluation, alerts, daily summary
+    # -------------------------------------------------------------------------
+
+    def save_thesis_evaluation(
+        self,
+        thesis_id: str,
+        evaluation: ThesisEvaluationResult,
+        review: ThesisReview,
+        evaluated_at: datetime,
+    ) -> None:
+        """
+        Persist a thesis evaluation and review.
+        
+        Raises:
+            RuntimeError: If evaluation_repo is not configured
+        """
+        if self.evaluation_repo is None:
+            raise RuntimeError("EvaluationRepository not configured")
+        self.evaluation_repo.upsert_thesis_evaluation(
+            thesis_id, evaluation, review, evaluated_at
+        )
+
+    def get_latest_evaluation(
+        self, thesis_id: str
+    ) -> Optional[Tuple[ThesisEvaluationResult, ThesisReview]]:
+        """
+        Retrieve the latest evaluation for a thesis.
+        
+        Returns:
+            Tuple of (evaluation, review) if found, None otherwise
+        """
+        if self.evaluation_repo is None:
+            return None
+        return self.evaluation_repo.get_latest_evaluation(thesis_id)
+
+    def save_alerts(self, alerts: List[Alert]) -> None:
+        """
+        Persist multiple alerts.
+        
+        Raises:
+            RuntimeError: If alert_repo is not configured
+        """
+        if self.alert_repo is None:
+            raise RuntimeError("AlertRepository not configured")
+        self.alert_repo.insert_many(alerts)
+
+    def list_alerts_for_date(self, target_date: date) -> List[Alert]:
+        """
+        Retrieve alerts for a specific date.
+        
+        Returns:
+            List of Alert objects, empty list if repo not configured
+        """
+        if self.alert_repo is None:
+            return []
+        return self.alert_repo.list_for_date(target_date)
+
+    def save_daily_summary(self, target_date: date, summary: DailySummary) -> None:
+        """
+        Persist a daily summary.
+        
+        Raises:
+            RuntimeError: If daily_summary_repo is not configured
+        """
+        if self.daily_summary_repo is None:
+            raise RuntimeError("DailySummaryRepository not configured")
+        self.daily_summary_repo.upsert_summary(target_date, summary)
+
+    def get_daily_summary(self, target_date: date) -> Optional[DailySummary]:
+        """
+        Retrieve a daily summary for a specific date.
+        
+        Returns:
+            DailySummary if found, None otherwise
+        """
+        if self.daily_summary_repo is None:
+            return None
+        return self.daily_summary_repo.get_summary(target_date)
+
+    # -------------------------------------------------------------------------
+    # E5: P&L helper for per-thesis performance
+    # -------------------------------------------------------------------------
+
+    def get_thesis_pnl(self, thesis_id: str) -> "ThesisPnL":
+        """
+        Compute P&L metrics for a thesis from its trades.
+        
+        Long-only assumption: all actions are BUY.
+        P&L = current_value - invested_notional.
+        
+        Args:
+            thesis_id: Thesis identifier
+            
+        Returns:
+            ThesisPnL with invested_notional, current_value, unrealized_pnl, and pct
+        """
+        from slice.models.execution import ThesisPnL
+        
+        if self.price_source is None:
+            raise RuntimeError("PriceSource not configured")
+        
+        trades = self.trade_repo.list_by_thesis(thesis_id)
+        
+        if not trades:
+            return ThesisPnL(
+                thesis_id=thesis_id,
+                invested_notional=0.0,
+                current_value=0.0,
+                unrealized_pnl=0.0,
+                unrealized_pnl_pct=None,
+            )
+        
+        # Long-only assumption: all actions are BUY
+        invested_notional = sum(t.quantity * t.price for t in trades)
+        
+        # Current value at latest prices
+        # Group by asset to reduce price calls
+        by_asset: dict[str, float] = {}
+        for t in trades:
+            by_asset[t.asset] = by_asset.get(t.asset, 0.0) + t.quantity
+        
+        current_value = 0.0
+        for asset, qty in by_asset.items():
+            price = self.price_source.get_current_price(asset)
+            current_value += qty * price
+        
+        unrealized_pnl = current_value - invested_notional
+        
+        unrealized_pnl_pct = None
+        if invested_notional > 0:
+            unrealized_pnl_pct = unrealized_pnl / invested_notional * 100.0
+        
+        return ThesisPnL(
+            thesis_id=thesis_id,
+            invested_notional=invested_notional,
+            current_value=current_value,
+            unrealized_pnl=unrealized_pnl,
+            unrealized_pnl_pct=unrealized_pnl_pct,
+        )

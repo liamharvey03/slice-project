@@ -183,8 +183,8 @@ class ContextBuilder:
         theses = self.data.get_all_theses()
         depth = self.data.get_portfolio_depth(theses)
 
-        factor_exposures = depth["factors"]
-        thesis_exposures = depth["thesis_exposures"]
+        factor_exposures = depth.factors
+        thesis_exposures = depth.thesis_exposures
         risk_profile = risk.dict() if risk else {}
 
         # Simple deterministic placeholders

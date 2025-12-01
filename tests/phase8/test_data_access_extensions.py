@@ -55,17 +55,19 @@ def test_data_access_portfolio_depth_and_macro_regimes():
 
     # --- Portfolio snapshot ---
     snap = da.get_current_portfolio()
-    assert "positions" in snap and "totals" in snap
-    assert len(snap["positions"]) == 3
+    assert hasattr(snap, "positions")
+    assert hasattr(snap, "totals")
+    assert len(snap.positions) == 3
+    assert snap.totals.portfolio_value == 1700.0
 
     # --- Portfolio depth ---
     depth = da.get_portfolio_depth(theses.values())
-    assert "concentration" in depth
-    assert "factors" in depth
-    assert "thesis_exposures" in depth
+    assert hasattr(depth, "concentration")
+    assert hasattr(depth, "factors")
+    assert hasattr(depth, "thesis_exposures")
 
-    conc = depth["concentration"]
-    assert conc["largest_weight"] > 0.0
+    conc = depth.concentration
+    assert conc.get("largest_weight", 0.0) > 0.0
 
     # --- Macro snapshot & regimes ---
     macro = da.get_macro_snapshot()

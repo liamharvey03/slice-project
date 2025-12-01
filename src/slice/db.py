@@ -144,3 +144,25 @@ def apply_phase4_schema() -> None:
     with engine.begin() as conn:
         for stmt in stmts:
             conn.execute(text(stmt))
+
+
+def apply_e4_schema() -> None:
+    """
+    Apply the E4 schema for evaluation/alert/daily_summary tables.
+
+    This reads sql/e4_schema.sql and executes it statement-by-statement.
+    """
+    # Determine path relative to project root
+    project_root = Path(__file__).resolve().parents[2]
+    schema_path = project_root / "sql" / "e4_schema.sql"
+
+    if not schema_path.exists():
+        raise FileNotFoundError(f"E4 schema file not found: {schema_path}")
+
+    sql_text = schema_path.read_text(encoding="utf-8")
+    stmts = _split_sql_statements(sql_text)
+
+    engine = get_engine()
+    with engine.begin() as conn:
+        for stmt in stmts:
+            conn.execute(text(stmt))

@@ -4,9 +4,6 @@ from fastapi import APIRouter
 
 from slice.intelligence.context.data_access import DataAccess
 from slice.intelligence.context.context_builder import ContextBuilder
-from slice.repositories.thesis_repo import ThesisRepository
-from slice.repositories.observation_repo import ObservationRepository
-from slice.repositories.trade_repo import TradeRepository
 
 
 router = APIRouter()
@@ -14,15 +11,13 @@ router = APIRouter()
 
 def get_data_access() -> DataAccess:
     """
-    Minimal wiring for DataAccess.
-
-    In production you may want a more explicit DB/session wiring, but this
-    keeps Phase 8 UI endpoints deterministic and non-LLM.
+    Get DataAccess instance using centrally wired dependency.
+    
+    Uses the shared DataAccess instance that includes E4 repositories,
+    ensuring consistency across all routes.
     """
-    thesis_repo = ThesisRepository()
-    obs_repo = ObservationRepository()
-    trade_repo = TradeRepository()
-    return DataAccess(thesis_repo=thesis_repo, obs_repo=obs_repo, trade_repo=trade_repo)
+    # Use centrally wired DataAccess with E4 repos
+    return DataAccess.depends()
 
 
 @router.get("/health")

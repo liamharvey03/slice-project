@@ -53,11 +53,12 @@ class OrchestratorClient:
         mode: SessionMode,
         include_memory: bool = True,
         include_risk: bool = False,
+        skip_ingest: bool = False,
     ) -> SessionResponse:
         """
         Core Phase-6 entrypoint.
 
-        user_text is passed directly into the orchestrator’s ingest path.
+        user_text is passed directly into the orchestrator's ingest path.
         SessionOptions controls memory/risk behavior ONLY.
         """
 
@@ -65,6 +66,7 @@ class OrchestratorClient:
             mode=mode,
             use_memory=include_memory,
             use_risk=include_risk,
+            skip_ingest=skip_ingest,
         )
 
         # Run the FULL async Phase-5 flow

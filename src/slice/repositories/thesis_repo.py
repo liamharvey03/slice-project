@@ -126,3 +126,76 @@ class ThesisRepository:
             rows = conn.execute(sql, {"lim": limit}).mappings().fetchall()
 
         return [self._row_to_thesis(r) for r in rows]
+
+    def list_active(self) -> List[Thesis]:
+        """Return all theses with ACTIVE status."""
+        engine = self.engine
+        sql = text("""
+            SELECT * FROM thesis
+            WHERE status = 'ACTIVE'
+            ORDER BY start_date DESC NULLS LAST, id DESC
+        """)
+
+        with engine.connect() as conn:
+            rows = conn.execute(sql).mappings().fetchall()
+
+        return [self._row_to_thesis(r) for r in rows]
+
+    def update(self, thesis: Thesis) -> Thesis:
+        """
+        Update an existing thesis.
+        
+        E5: Used primarily to update thesis status (e.g., mark as ACTIVE).
+        For full updates, use insert() which does upsert.
+        
+        Args:
+            thesis: Thesis with updated fields
+            
+        Returns:
+            Updated thesis
+        """
+        engine = self.engine
+        
+        # Base dict
+        params = thesis.dict()
+        
+        # JSONB fields: convert lists → JSON strings
+        json_fields = ["drivers", "disconfirmers", "tags", "monitor_indices"]
+        for f in json_fields:
+            params[f] = json.dumps(params[f])
+        
+        # Enums
+        params["status"] = thesis.status.value
+        
+        # expression (list[ThesisExpressionLeg]) → JSON
+        expr_payload = []
+        for leg in thesis.expression:
+            expr_payload.append(
+                {
+                    "asset": leg.asset,
+                    "direction": leg.direction.value,
+                    "size_pct": leg.size_pct,
+                }
+            )
+        params["expression"] = json.dumps(expr_payload)
+        
+        sql = text("""
+            UPDATE thesis SET
+                title = :title,
+                hypothesis = :hypothesis,
+                drivers = :drivers,
+                disconfirmers = :disconfirmers,
+                expression = :expression,
+                start_date = :start_date,
+                review_date = :review_date,
+                status = :status,
+                tags = :tags,
+                monitor_indices = :monitor_indices,
+                notes = :notes
+            WHERE id = :id
+        """)
+        
+        with engine.begin() as conn:
+            conn.execute(sql, params)
+        
+        return thesis
