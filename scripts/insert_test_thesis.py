@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Insert a test thesis (TEST_T1) into the database for E4 verification.
+Insert a test thesis (T1 - Gold vs Real Yields) into the database for E6 UI testing.
 """
 import sys
 from pathlib import Path
@@ -18,11 +18,21 @@ def main():
     repo = ThesisRepository(engine=engine)
     
     thesis = Thesis(
-        id="TEST_T1",
-        title="Test Gold Long Thesis",
-        hypothesis="Gold will appreciate due to inflation hedging demand",
-        drivers=["inflation", "currency debasement"],
-        disconfirmers=["strong USD", "rising real yields"],
+        id="T1",
+        title="Gold vs Real Yields",
+        hypothesis="Gold outperforms when real yields decline due to inflation exceeding nominal rate increases. As central banks pause or pivot dovish while inflation remains elevated, real yields compress, making gold attractive relative to bonds.",
+        drivers=[
+            "Declining real yields (nominal rates - inflation)",
+            "Inflation fears / persistent inflation prints above target",
+            "Fed dovish pivot or pause in rate hikes",
+            "Geopolitical tensions increasing safe-haven demand"
+        ],
+        disconfirmers=[
+            "Real yields rising (Fed aggressive, inflation cooling)",
+            "Strong USD (inverse correlation with gold)",
+            "Risk-on rally in equities reducing gold safe-haven demand",
+            "Fed successfully anchoring inflation expectations"
+        ],
         expression=[
             ThesisExpressionLeg(
                 asset="GLD",
@@ -32,9 +42,10 @@ def main():
         ],
         start_date="2024-01-01",
         review_date=None,
-        status=ThesisStatus.ACTIVE,
-        tags=[],
-        monitor_indices=["SPX"]
+        status=ThesisStatus.WATCHLIST,
+        tags=["gold", "inflation", "macro", "real-yields"],
+        monitor_indices=["DXY", "TIP", "CPI", "SPX"],
+        notes="Gold vs Inflation thesis for E6 evaluation harness testing"
     )
     
     repo.insert(thesis)

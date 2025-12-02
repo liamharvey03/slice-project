@@ -1,13 +1,13 @@
 from typing import Any, Optional
 import time
 
-from src.slice.session.models import SessionOptions, SessionResponse
-from src.slice.session.prompts import build_prompt
-from src.slice.session.logging import log_session_event
-from src.slice.memory.interface import get_memory_context_for_text
-from src.slice.risk.interface import get_snapshot, render_risk_snapshot_text
+from slice.session.models import SessionOptions, SessionResponse
+from slice.session.prompts import build_prompt
+from slice.session.logging import log_session_event
+from slice.memory.interface import get_memory_context_for_text
+from slice.risk.interface import get_snapshot, render_risk_snapshot_text
 
-from src.slice.ingest.pipeline import IngestionPipeline
+from slice.ingest.pipeline import IngestionPipeline
 
 
 class SessionOrchestrator:

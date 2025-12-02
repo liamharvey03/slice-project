@@ -95,3 +95,37 @@ class AlertRepository:
         
         return alerts
 
+    def list_recent(self, limit: int = 20) -> List[Alert]:
+        """
+        Retrieve the most recent alerts, ordered by timestamp descending.
+        
+        Args:
+            limit: Maximum number of alerts to return (default: 20)
+            
+        Returns:
+            List of Alert objects, most recent first
+        """
+        engine = self.engine
+        
+        sql = text("""
+            SELECT id, thesis_id, thesis_title, message, observation_id,
+                   timestamp, date
+            FROM alert
+            ORDER BY timestamp DESC
+            LIMIT :lim
+        """)
+        
+        with engine.connect() as conn:
+            rows = conn.execute(sql, {"lim": limit}).mappings().fetchall()
+        
+        alerts = []
+        for row in rows:
+            # Convert row to Alert
+            alert_dict = dict(row)
+            # Remove 'date' field if Alert model doesn't expect it
+            if "date" in alert_dict:
+                del alert_dict["date"]
+            alerts.append(Alert(**alert_dict))
+        
+        return alerts
+

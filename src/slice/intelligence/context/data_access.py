@@ -367,6 +367,20 @@ class DataAccess:
             return []
         return self.alert_repo.list_for_date(target_date)
 
+    def list_recent_alerts(self, limit: int = 20) -> List[Alert]:
+        """
+        Retrieve the most recent alerts, ordered by timestamp descending.
+        
+        Args:
+            limit: Maximum number of alerts to return (default: 20)
+            
+        Returns:
+            List of Alert objects, empty list if repo not configured
+        """
+        if self.alert_repo is None:
+            return []
+        return self.alert_repo.list_recent(limit)
+
     def save_daily_summary(self, target_date: date, summary: DailySummary) -> None:
         """
         Persist a daily summary.
