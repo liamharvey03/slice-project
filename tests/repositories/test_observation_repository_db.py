@@ -4,9 +4,9 @@ from typing import List
 
 import pytest
 
-from slice.models.common import Sentiment
-from slice.models.observation import Observation
-from slice.repositories.observation_repo import ObservationRepository
+from voyager.models.common import Sentiment
+from voyager.models.observation import Observation
+from voyager.repositories.observation_repo import ObservationRepository
 
 EMBED_DIM = 1536
 

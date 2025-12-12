@@ -5,15 +5,15 @@ import pytest
 from datetime import datetime, timezone
 from unittest.mock import Mock, AsyncMock
 
-from slice.sessions.thesis_evaluation_session import ThesisEvaluationSession
-from slice.sessions.exceptions import ThesisNotFoundError
-from slice.intelligence.context.data_access import DataAccess
-from slice.evaluation.thesis_evaluation import ThesisEvaluationService
-from slice.llm.llm_tools import LLMTools
-from slice.models.thesis import Thesis, ThesisExpressionLeg
-from slice.models.common import Direction, ThesisStatus
-from slice.models.evaluation import ThesisEvaluationResult, EquityPoint, ScenarioImpact
-from slice.models.llm_outputs import ThesisReview
+from voyager.sessions.thesis_evaluation_session import ThesisEvaluationSession
+from voyager.sessions.exceptions import ThesisNotFoundError
+from voyager.intelligence.context.data_access import DataAccess
+from voyager.evaluation.thesis_evaluation import ThesisEvaluationService
+from voyager.llm.llm_tools import LLMTools
+from voyager.models.thesis import Thesis, ThesisExpressionLeg
+from voyager.models.common import Direction, ThesisStatus
+from voyager.models.evaluation import ThesisEvaluationResult, EquityPoint, ScenarioImpact
+from voyager.models.llm_outputs import ThesisReview
 
 
 @pytest.fixture

@@ -4,8 +4,8 @@ E4: Tests for DailySummaryRepository.
 import pytest
 from datetime import date, timedelta
 
-from slice.repositories.daily_summary_repo import DailySummaryRepository
-from slice.models.llm_outputs import DailySummary
+from voyager.repositories.daily_summary_repo import DailySummaryRepository
+from voyager.models.llm_outputs import DailySummary
 
 
 def test_upsert_summary(daily_summary_repo, sample_daily_summary):

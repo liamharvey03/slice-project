@@ -4,8 +4,8 @@ E4: Tests for AlertRepository.
 import pytest
 from datetime import date, datetime, timedelta, timezone
 
-from slice.repositories.alert_repo import AlertRepository
-from slice.models.llm_inputs import Alert
+from voyager.repositories.alert_repo import AlertRepository
+from voyager.models.llm_inputs import Alert
 
 
 def test_insert_many(alert_repo, sample_alert):

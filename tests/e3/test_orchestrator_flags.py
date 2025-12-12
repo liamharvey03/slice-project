@@ -9,8 +9,8 @@ from unittest.mock import Mock, call
 
 import pytest
 
-from src.slice.session.orchestrator import SessionOrchestrator
-from src.slice.session.models import SessionOptions, SessionMode
+from voyager.session.orchestrator import SessionOrchestrator
+from voyager.session.models import SessionOptions, SessionMode
 
 
 class DummyLLM:
@@ -36,7 +36,7 @@ def mock_ingest(monkeypatch):
     )
 
     monkeypatch.setattr(
-        "src.slice.session.orchestrator.IngestionPipeline",
+        "voyager.session.orchestrator.IngestionPipeline",
         lambda: mock_ingest_instance,
     )
     return mock_ingest_instance
@@ -48,7 +48,7 @@ def mock_memory(monkeypatch):
     mock_func = Mock(return_value={"items": []})
 
     monkeypatch.setattr(
-        "src.slice.session.orchestrator.get_memory_context_for_text",
+        "voyager.session.orchestrator.get_memory_context_for_text",
         mock_func,
     )
     return mock_func
@@ -60,7 +60,7 @@ def mock_risk(monkeypatch):
     mock_func = Mock(return_value=None)
 
     monkeypatch.setattr(
-        "src.slice.session.orchestrator.get_snapshot",
+        "voyager.session.orchestrator.get_snapshot",
         mock_func,
     )
     return mock_func
@@ -70,7 +70,7 @@ def mock_risk(monkeypatch):
 def mock_logger(monkeypatch):
     """Mock logger to avoid side effects."""
     monkeypatch.setattr(
-        "src.slice.session.orchestrator.log_session_event",
+        "voyager.session.orchestrator.log_session_event",
         lambda *args, **kwargs: None,
     )
 

@@ -5,11 +5,11 @@ import pytest
 from datetime import date, datetime
 from unittest.mock import Mock
 
-from slice.execution.paper import PaperExecutionAdapter
-from slice.models.execution import TradePlan, TradeLeg
-from slice.models.trade import Trade
-from slice.models.common import TradeType
-from slice.repositories.trade_repo import TradeRepository
+from voyager.execution.paper import PaperExecutionAdapter
+from voyager.models.execution import TradePlan, TradeLeg
+from voyager.models.trade import Trade
+from voyager.models.common import TradeType
+from voyager.repositories.trade_repo import TradeRepository
 
 
 class StubPriceSource:

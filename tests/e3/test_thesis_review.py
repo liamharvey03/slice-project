@@ -11,12 +11,12 @@ import asyncio
 import json
 import pytest
 
-from slice.llm.tools import llm_review_thesis, LLMOutputError
-from slice.models.thesis import Thesis, ThesisExpressionLeg
-from slice.models.evaluation import ThesisEvaluationResult, EquityPoint, ScenarioImpact
-from slice.models.llm_outputs import ThesisReview
-from slice.models.common import Direction, ThesisStatus
-from slice.llm.metrics import llm_stats, reset_stats
+from voyager.llm.tools import llm_review_thesis, LLMOutputError
+from voyager.models.thesis import Thesis, ThesisExpressionLeg
+from voyager.models.evaluation import ThesisEvaluationResult, EquityPoint, ScenarioImpact
+from voyager.models.llm_outputs import ThesisReview
+from voyager.models.common import Direction, ThesisStatus
+from voyager.llm.metrics import llm_stats, reset_stats
 from datetime import datetime
 
 
@@ -30,7 +30,7 @@ class MockOrchestrator:
 
     async def run_session(self, text: str, options):
         self.calls.append((text, options))
-        from slice.session.models import SessionResponse
+        from voyager.session.models import SessionResponse
 
         return SessionResponse(
             observation_id=None,

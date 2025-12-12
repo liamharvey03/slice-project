@@ -1,6 +1,6 @@
 import pytest
 
-from slice.intelligence.context.data_access import DataAccess
+from voyager.intelligence.context.data_access import DataAccess
 
 
 # --- Helper fakes -----------------------------------------------------------

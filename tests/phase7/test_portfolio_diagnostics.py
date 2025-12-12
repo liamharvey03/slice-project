@@ -1,7 +1,7 @@
 import json
 import pytest
 
-from slice.intelligence.portfolio_diagnostics import run_portfolio_diagnostics
+from voyager.intelligence.portfolio_diagnostics import run_portfolio_diagnostics
 
 
 class _FakeRiskSnapshot:

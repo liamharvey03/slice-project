@@ -1,7 +1,7 @@
 import pytest
 from typing import Optional, List
 
-from slice.intelligence.context.context_builder import ContextBuilder
+from voyager.intelligence.context.context_builder import ContextBuilder
 
 
 class StubThesis:

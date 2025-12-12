@@ -9,17 +9,17 @@ Verifies:
 import pytest
 from pydantic import ValidationError
 
-from slice.models.llm_outputs import (
+from voyager.models.llm_outputs import (
     ThesisReview,
     CrossThesisReport,
     IntuitionAnswer,
     DailySummary,
 )
-from slice.models.llm_inputs import Alert, DailyContext
-from slice.models.observation import Observation
-from slice.models.portfolio import PortfolioSnapshot, PortfolioTotals, Position
-from slice.models.thesis import Thesis, ThesisExpressionLeg
-from slice.models.common import Sentiment, ThesisStatus, Direction
+from voyager.models.llm_inputs import Alert, DailyContext
+from voyager.models.observation import Observation
+from voyager.models.portfolio import PortfolioSnapshot, PortfolioTotals, Position
+from voyager.models.thesis import Thesis, ThesisExpressionLeg
+from voyager.models.common import Sentiment, ThesisStatus, Direction
 from datetime import date, datetime
 
 

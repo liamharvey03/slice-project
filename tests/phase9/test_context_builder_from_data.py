@@ -1,4 +1,4 @@
-import slice.intelligence.context.context_builder as cb
+import voyager.intelligence.context.context_builder as cb
 
 
 def test_context_builder_module_imports():

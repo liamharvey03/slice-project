@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from slice.api.main import app
+from voyager.api.main import app
 
 
 client = TestClient(app)

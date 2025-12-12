@@ -2,18 +2,18 @@ import streamlit as st
 import asyncio
 from datetime import date
 
-from slice.intelligence.context.data_access import DataAccess
-from slice.api.deps import (
+from voyager.intelligence.context.data_access import DataAccess
+from voyager.api.deps import (
     get_data_access_instance,
     get_price_source_instance,
     get_orchestrator_client_instance,
 )
-from slice.evaluation.thesis_evaluation import ThesisEvaluationService
-from slice.llm.llm_tools import LLMTools
-from slice.sessions.thesis_evaluation_session import ThesisEvaluationSession
-from slice.sessions.daily_update_session import DailyUpdateSession
-from slice.execution.paper import PaperExecutionAdapter
-from slice.models.common import ThesisStatus
+from voyager.evaluation.thesis_evaluation import ThesisEvaluationService
+from voyager.llm.llm_tools import LLMTools
+from voyager.sessions.thesis_evaluation_session import ThesisEvaluationSession
+from voyager.sessions.daily_update_session import DailyUpdateSession
+from voyager.execution.paper import PaperExecutionAdapter
+from voyager.models.common import ThesisStatus
 
 
 @st.cache_resource
@@ -37,8 +37,8 @@ def get_llm_tools() -> LLMTools:
     """
     E6: LLM tools wrapper for thesis review, daily summary, and Q&A.
     """
-    from slice.llm.tools import OrchestratorProtocol
-    from slice.session.models import SessionOptions, SessionResponse
+    from voyager.llm.tools import OrchestratorProtocol
+    from voyager.session.models import SessionOptions, SessionResponse
     
     orchestrator_client = get_orchestrator_client_instance()
     
@@ -526,7 +526,7 @@ def render_alerts_tab(data_access: DataAccess, llm_tools: LLMTools):
     
     # LLM Diagnostics
     st.subheader("LLM Diagnostics")
-    from slice.llm.metrics import llm_stats
+    from voyager.llm.metrics import llm_stats
     
     diagnostics_data = []
     for tool_name, stats in llm_stats.items():
@@ -651,9 +651,9 @@ def render_qa_tab(data_access: DataAccess, llm_tools: LLMTools):
 
 
 def main():
-    st.set_page_config(page_title="Slice E6 UI", layout="wide")
+    st.set_page_config(page_title="Voyager E6 UI", layout="wide")
 
-    st.title("Slice – E6 Evaluation Harness")
+    st.title("Voyager – E6 Evaluation Harness")
     st.markdown(
         "Interactive dashboard for thesis evaluation, portfolio management, and Q&A."
     )

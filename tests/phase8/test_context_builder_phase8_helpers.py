@@ -1,7 +1,7 @@
 from typing import List
 
-from slice.intelligence.context.context_builder import ContextBuilder
-from slice.intelligence.context.data_access import DataAccess
+from voyager.intelligence.context.context_builder import ContextBuilder
+from voyager.intelligence.context.data_access import DataAccess
 
 
 class FakeThesis:

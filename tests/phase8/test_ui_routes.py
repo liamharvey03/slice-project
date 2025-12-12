@@ -2,8 +2,8 @@ from typing import Any, Dict, List
 
 from fastapi.testclient import TestClient
 
-from slice.api.main import app
-import slice.api.ui_routes as ui_routes_mod
+from voyager.api.main import app
+import voyager.api.ui_routes as ui_routes_mod
 
 
 class _FakeThesis:

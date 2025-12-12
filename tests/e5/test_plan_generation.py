@@ -3,11 +3,11 @@ E5: Unit tests for TradePlan generation (NaiveSizingEngine behavior).
 """
 import pytest
 
-from slice.execution.paper import PaperExecutionAdapter
-from slice.models.thesis import Thesis, ThesisExpressionLeg
-from slice.models.common import Direction, ThesisStatus
-from slice.repositories.trade_repo import TradeRepository
-from slice.quant.price_source import PriceSource
+from voyager.execution.paper import PaperExecutionAdapter
+from voyager.models.thesis import Thesis, ThesisExpressionLeg
+from voyager.models.common import Direction, ThesisStatus
+from voyager.repositories.trade_repo import TradeRepository
+from voyager.quant.price_source import PriceSource
 
 
 class StubPriceSource:

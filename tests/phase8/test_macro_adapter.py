@@ -1,4 +1,4 @@
-from slice.intelligence.context.macro_adapter import build_macro_snapshot, compute_regimes
+from voyager.intelligence.context.macro_adapter import build_macro_snapshot, compute_regimes
 
 
 def test_build_macro_snapshot_and_regimes():

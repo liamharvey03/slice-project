@@ -1,6 +1,6 @@
 import math
 
-from slice.intelligence.context.portfolio_adapter import (
+from voyager.intelligence.context.portfolio_adapter import (
     build_portfolio_snapshot,
     PortfolioAdapterError,
 )

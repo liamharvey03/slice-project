@@ -1,10 +1,10 @@
 import json
 import pytest
 
-from slice.intelligence.long_horizon import run_long_horizon_analysis
-from slice.intelligence.strategy import run_strategy_recommendation
-from slice.intelligence.portfolio_diagnostics import run_portfolio_diagnostics
-from slice.intelligence.narrative import run_narrative_coherence
+from voyager.intelligence.long_horizon import run_long_horizon_analysis
+from voyager.intelligence.strategy import run_strategy_recommendation
+from voyager.intelligence.portfolio_diagnostics import run_portfolio_diagnostics
+from voyager.intelligence.narrative import run_narrative_coherence
 
 
 class _FakeThesis:

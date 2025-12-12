@@ -1,7 +1,7 @@
 import json
 import pytest
 
-from slice.intelligence.long_horizon import run_long_horizon_analysis
+from voyager.intelligence.long_horizon import run_long_horizon_analysis
 
 
 class _FakeThesis:

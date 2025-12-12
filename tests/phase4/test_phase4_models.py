@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from slice.models.thesis import Thesis
-from slice.models.observation import Observation
-from slice.models.trade import Trade
-from slice.models.scenario import Scenario
+from voyager.models.thesis import Thesis
+from voyager.models.observation import Observation
+from voyager.models.trade import Trade
+from voyager.models.scenario import Scenario
 
 
 def test_thesis_model_valid():

@@ -1,7 +1,7 @@
 import json
 import pytest
 
-from slice.intelligence.narrative import run_narrative_coherence
+from voyager.intelligence.narrative import run_narrative_coherence
 
 
 class _FakeThesis:

@@ -1,0 +1,193 @@
+{
+  "series": [
+    {
+      "id": "FEDFUNDS",
+      "source": "FRED",
+      "name": "Federal Funds Effective Rate",
+      "category": "rates",
+      "aliases": ["fed funds", "fed rate", "federal funds", "fed hikes", "fed policy"],
+      "frequency": "daily",
+      "return_type": "diff"
+    },
+    {
+      "id": "DGS10",
+      "source": "FRED",
+      "name": "10-Year Treasury Constant Maturity Rate",
+      "category": "rates",
+      "aliases": ["10y yield", "10 year", "treasury yield", "10y treasury", "long rates"],
+      "frequency": "daily",
+      "return_type": "diff"
+    },
+    {
+      "id": "DGS2",
+      "source": "FRED",
+      "name": "2-Year Treasury Constant Maturity Rate",
+      "category": "rates",
+      "aliases": ["2y yield", "2 year", "short rates", "2y treasury"],
+      "frequency": "daily",
+      "return_type": "diff"
+    },
+    {
+      "id": "DFII10",
+      "source": "FRED",
+      "name": "10-Year Treasury Inflation-Indexed Security",
+      "category": "rates",
+      "aliases": ["real yields", "10y real", "tips yield", "real yield", "real rates"],
+      "frequency": "daily",
+      "return_type": "diff"
+    },
+    {
+      "id": "T10YIE",
+      "source": "FRED",
+      "name": "10-Year Breakeven Inflation Rate",
+      "category": "rates",
+      "aliases": ["breakeven", "inflation expectations", "10y breakeven"],
+      "frequency": "daily",
+      "return_type": "diff"
+    },
+    {
+      "id": "GLD",
+      "source": "TwelveData",
+      "name": "SPDR Gold Shares",
+      "category": "commodity",
+      "aliases": ["gold", "gold etf", "xau"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "SLV",
+      "source": "TwelveData",
+      "name": "iShares Silver Trust",
+      "category": "commodity",
+      "aliases": ["silver", "silver etf"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "USO",
+      "source": "TwelveData",
+      "name": "United States Oil Fund",
+      "category": "commodity",
+      "aliases": ["oil", "crude", "wti", "oil etf"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "DBC",
+      "source": "TwelveData",
+      "name": "Invesco DB Commodity Index",
+      "category": "commodity",
+      "aliases": ["commodities", "commodity index", "broad commodities"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "UUP",
+      "source": "TwelveData",
+      "name": "Invesco DB US Dollar Index Bullish Fund",
+      "category": "fx",
+      "aliases": ["dollar", "usd", "dxy", "dollar index", "greenback"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "FXE",
+      "source": "TwelveData",
+      "name": "Invesco CurrencyShares Euro Trust",
+      "category": "fx",
+      "aliases": ["euro", "eur", "eurusd"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "FXY",
+      "source": "TwelveData",
+      "name": "Invesco CurrencyShares Japanese Yen Trust",
+      "category": "fx",
+      "aliases": ["yen", "jpy", "usdjpy"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "SPY",
+      "source": "TwelveData",
+      "name": "SPDR S&P 500 ETF",
+      "category": "equity",
+      "aliases": ["s&p", "sp500", "stocks", "equities", "us stocks", "s&p 500"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "QQQ",
+      "source": "TwelveData",
+      "name": "Invesco QQQ Trust",
+      "category": "equity",
+      "aliases": ["nasdaq", "tech", "tech stocks", "qqq"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "IWM",
+      "source": "TwelveData",
+      "name": "iShares Russell 2000 ETF",
+      "category": "equity",
+      "aliases": ["small caps", "russell", "russell 2000"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "EFA",
+      "source": "TwelveData",
+      "name": "iShares MSCI EAFE ETF",
+      "category": "equity",
+      "aliases": ["international", "developed markets", "eafe", "ex-us"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "EEM",
+      "source": "TwelveData",
+      "name": "iShares MSCI Emerging Markets ETF",
+      "category": "equity",
+      "aliases": ["emerging markets", "em", "emerging"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "TLT",
+      "source": "TwelveData",
+      "name": "iShares 20+ Year Treasury Bond ETF",
+      "category": "rates",
+      "aliases": ["long bonds", "treasury bonds", "long duration", "tlt"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "IEF",
+      "source": "TwelveData",
+      "name": "iShares 7-10 Year Treasury Bond ETF",
+      "category": "rates",
+      "aliases": ["intermediate bonds", "7-10 year", "ief"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "TIP",
+      "source": "TwelveData",
+      "name": "iShares TIPS Bond ETF",
+      "category": "rates",
+      "aliases": ["tips", "inflation protected", "tips etf"],
+      "frequency": "daily",
+      "return_type": "pct_change"
+    },
+    {
+      "id": "VIXY",
+      "source": "TwelveData",
+      "name": "ProShares VIX Short-Term Futures ETF",
+      "category": "volatility",
+      "aliases": ["vix", "volatility", "fear index", "vol", "vixy"],
+      "frequency": "daily",
+      "return_type": "level"
+    }
+  ]
+}

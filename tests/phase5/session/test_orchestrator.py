@@ -1,7 +1,7 @@
 import asyncio
 
-from src.slice.session.orchestrator import SessionOrchestrator
-from src.slice.session.models import SessionOptions
+from voyager.session.orchestrator import SessionOrchestrator
+from voyager.session.models import SessionOptions
 
 
 class DummyLLM:
@@ -28,25 +28,25 @@ def test_orchestrator_basic(monkeypatch):
             return R()
 
     monkeypatch.setattr(
-        "src.slice.session.orchestrator.IngestionPipeline",
+        "voyager.session.orchestrator.IngestionPipeline",
         lambda: DummyIngest(),
     )
 
     # Patch memory wrapper
     monkeypatch.setattr(
-        "src.slice.session.orchestrator.get_memory_context_for_text",
+        "voyager.session.orchestrator.get_memory_context_for_text",
         lambda text, k: {"items": []},
     )
 
     # Patch risk to return None (no snapshot)
     monkeypatch.setattr(
-        "src.slice.session.orchestrator.get_snapshot",
+        "voyager.session.orchestrator.get_snapshot",
         lambda thesis_id=None, portfolio_id=None: None,
     )
 
     # Patch logger to be a no-op (even if our stub changed later)
     monkeypatch.setattr(
-        "src.slice.session.orchestrator.log_session_event",
+        "voyager.session.orchestrator.log_session_event",
         lambda *args, **kwargs: None,
     )
 

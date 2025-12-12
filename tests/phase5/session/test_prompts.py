@@ -1,5 +1,5 @@
-from src.slice.session.prompts import build_prompt, SYSTEM_PROMPT
-from src.slice.session.models import SessionOptions, SessionMode
+from voyager.session.prompts import build_prompt, SYSTEM_PROMPT
+from voyager.session.models import SessionOptions, SessionMode
 
 
 def test_prompt_ordering():

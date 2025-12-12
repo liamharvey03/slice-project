@@ -1,4 +1,4 @@
-import slice.risk.interface as ri
+import voyager.risk.interface as ri
 
 
 class FakeTradeRepoNoTrades:

@@ -1,4 +1,4 @@
-from src.slice.session.logging import log_session_event
+from voyager.session.logging import log_session_event
 
 
 def test_log_session_event_does_not_raise(monkeypatch):
@@ -7,7 +7,7 @@ def test_log_session_event_does_not_raise(monkeypatch):
         raise RuntimeError("logging failure")
 
     monkeypatch.setattr(
-        "src.slice.session.logging.logger.info",
+        "voyager.session.logging.logger.info",
         broken_info,
     )
 

@@ -5,9 +5,9 @@ import pandas as pd
 import pytest
 from pydantic import ValidationError
 
-from slice.evaluation.thesis_evaluation import ThesisEvaluationService
-from slice.models.common import Direction, ThesisStatus
-from slice.models.thesis import Thesis, ThesisExpressionLeg
+from voyager.evaluation.thesis_evaluation import ThesisEvaluationService
+from voyager.models.common import Direction, ThesisStatus
+from voyager.models.thesis import Thesis, ThesisExpressionLeg
 
 
 class FakePriceSource:

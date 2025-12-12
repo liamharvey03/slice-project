@@ -1,7 +1,7 @@
 import pytest
 
-from slice.intelligence.thesis_reviewer import ThesisReviewer
-from slice.session.models import SessionResponse
+from voyager.intelligence.thesis_reviewer import ThesisReviewer
+from voyager.session.models import SessionResponse
 
 
 class FakeContextBuilder:

@@ -13,8 +13,8 @@ import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-import slice.api.intelligence_routes as routes_mod
-from slice.session.models import SessionResponse
+import voyager.api.intelligence_routes as routes_mod
+from voyager.session.models import SessionResponse
 
 
 # -----------------------------

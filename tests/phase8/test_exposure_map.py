@@ -1,7 +1,7 @@
 import math
 
-from slice.intelligence.context.portfolio_adapter import build_portfolio_snapshot
-from slice.intelligence.context.exposure_map import build_exposure_map
+from voyager.intelligence.context.portfolio_adapter import build_portfolio_snapshot
+from voyager.intelligence.context.exposure_map import build_exposure_map
 
 
 def test_build_exposure_map_basic():

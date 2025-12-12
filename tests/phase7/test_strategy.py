@@ -1,7 +1,7 @@
 import json
 import pytest
 
-from slice.intelligence.strategy import run_strategy_recommendation
+from voyager.intelligence.strategy import run_strategy_recommendation
 
 
 class _FakeThesis:

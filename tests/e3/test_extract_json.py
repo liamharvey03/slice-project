@@ -8,7 +8,7 @@ Verifies:
 """
 import pytest
 
-from slice.llm.tools import extract_json, LLMOutputError
+from voyager.llm.tools import extract_json, LLMOutputError
 
 
 def test_extract_json_valid_json_only():

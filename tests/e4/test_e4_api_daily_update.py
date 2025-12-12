@@ -5,21 +5,21 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import Mock, AsyncMock
 
-from slice.api.main import app
-from slice.repositories.thesis_repo import ThesisRepository
-from slice.repositories.observation_repo import ObservationRepository
-from slice.repositories.trade_repo import TradeRepository
-from slice.repositories.evaluation_repo import EvaluationRepository
-from slice.repositories.alert_repo import AlertRepository
-from slice.repositories.daily_summary_repo import DailySummaryRepository
-from slice.intelligence.context.data_access import DataAccess
-from slice.llm.llm_tools import LLMTools
-from slice.models.thesis import Thesis, ThesisExpressionLeg
-from slice.models.observation import Observation
-from slice.models.common import Direction, ThesisStatus, Sentiment
-from slice.models.llm_outputs import DailySummary
+from voyager.api.main import app
+from voyager.repositories.thesis_repo import ThesisRepository
+from voyager.repositories.observation_repo import ObservationRepository
+from voyager.repositories.trade_repo import TradeRepository
+from voyager.repositories.evaluation_repo import EvaluationRepository
+from voyager.repositories.alert_repo import AlertRepository
+from voyager.repositories.daily_summary_repo import DailySummaryRepository
+from voyager.intelligence.context.data_access import DataAccess
+from voyager.llm.llm_tools import LLMTools
+from voyager.models.thesis import Thesis, ThesisExpressionLeg
+from voyager.models.observation import Observation
+from voyager.models.common import Direction, ThesisStatus, Sentiment
+from voyager.models.llm_outputs import DailySummary
 from datetime import datetime, timezone
-import slice.api.session_routes_e4 as routes_mod
+import voyager.api.session_routes_e4 as routes_mod
 
 
 @pytest.fixture

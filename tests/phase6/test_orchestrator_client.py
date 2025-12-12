@@ -1,7 +1,7 @@
 import pytest
 
-from slice.intelligence.orchestrator_client import OrchestratorClient
-from slice.session.models import SessionMode, SessionOptions
+from voyager.intelligence.orchestrator_client import OrchestratorClient
+from voyager.session.models import SessionMode, SessionOptions
 
 
 class DummyLLMClient:
@@ -33,7 +33,7 @@ def patch_session_orchestrator(monkeypatch):
     Patch SessionOrchestrator inside the intelligence wrapper
     so we can inspect the SessionOptions created by OrchestratorClient.
     """
-    import slice.intelligence.orchestrator_client as oc_mod
+    import voyager.intelligence.orchestrator_client as oc_mod
 
     monkeypatch.setattr(oc_mod, "SessionOrchestrator", DummySessionOrchestrator)
     yield

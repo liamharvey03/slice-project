@@ -1,4 +1,4 @@
-from src.slice.risk.interface import (
+from voyager.risk.interface import (
     RiskSnapshot,
     get_snapshot,
     render_risk_snapshot_text,
@@ -38,7 +38,7 @@ def test_get_snapshot_no_trades_returns_none(monkeypatch):
             return []
 
     monkeypatch.setattr(
-        "src.slice.repositories.trade_repo.TradeRepository", DummyRepo
+        "voyager.repositories.trade_repo.TradeRepository", DummyRepo
     )
 
     result = get_snapshot()

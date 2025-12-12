@@ -5,15 +5,15 @@ import pytest
 from datetime import date, datetime, timezone
 from unittest.mock import Mock, AsyncMock
 
-from slice.sessions.daily_update_session import DailyUpdateSession
-from slice.intelligence.context.data_access import DataAccess
-from slice.llm.llm_tools import LLMTools
-from slice.models.thesis import Thesis, ThesisExpressionLeg
-from slice.models.observation import Observation
-from slice.models.common import Direction, ThesisStatus, Sentiment
-from slice.models.llm_outputs import DailySummary
-from slice.models.llm_inputs import Alert
-from slice.models.portfolio import PortfolioSnapshot, PortfolioTotals, Position, PortfolioDepthSnapshot
+from voyager.sessions.daily_update_session import DailyUpdateSession
+from voyager.intelligence.context.data_access import DataAccess
+from voyager.llm.llm_tools import LLMTools
+from voyager.models.thesis import Thesis, ThesisExpressionLeg
+from voyager.models.observation import Observation
+from voyager.models.common import Direction, ThesisStatus, Sentiment
+from voyager.models.llm_outputs import DailySummary
+from voyager.models.llm_inputs import Alert
+from voyager.models.portfolio import PortfolioSnapshot, PortfolioTotals, Position, PortfolioDepthSnapshot
 
 
 @pytest.fixture

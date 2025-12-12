@@ -1,9 +1,9 @@
 from datetime import datetime
 from typing import List, Tuple
 
-from slice.ingest import IngestionPipeline
-from slice.memory.service import MemoryService
-from slice.models.observation import Observation
+from voyager.ingest import IngestionPipeline
+from voyager.memory.service import MemoryService
+from voyager.models.observation import Observation
 
 
 def _make_obs_payload(

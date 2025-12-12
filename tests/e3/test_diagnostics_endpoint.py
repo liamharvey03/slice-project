@@ -9,8 +9,8 @@ Verifies:
 import pytest
 from fastapi.testclient import TestClient
 
-from slice.api.main import app
-from slice.llm.metrics import llm_stats, reset_stats, record_llm_call
+from voyager.api.main import app
+from voyager.llm.metrics import llm_stats, reset_stats, record_llm_call
 
 
 @pytest.fixture

@@ -3,9 +3,9 @@ from typing import Optional
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from slice.api.intelligence_routes import router
-import slice.api.intelligence_routes as routes_mod
-from slice.session.models import SessionResponse
+from voyager.api.intelligence_routes import router
+import voyager.api.intelligence_routes as routes_mod
+from voyager.session.models import SessionResponse
 
 
 class FakeThesisReviewer:

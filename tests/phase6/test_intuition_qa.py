@@ -1,7 +1,7 @@
 import pytest
 
-from slice.intelligence.intuition_qa import IntuitionQAEngine
-from slice.session.models import SessionResponse
+from voyager.intelligence.intuition_qa import IntuitionQAEngine
+from voyager.session.models import SessionResponse
 
 
 class FakeMemoryService:

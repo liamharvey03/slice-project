@@ -6,7 +6,7 @@ Instead, we pin the structural contract that the session response exposes a
 `latency_ms` field, so callers can evaluate performance.
 """
 
-from slice.session.orchestrator import SessionResponse
+from voyager.session.orchestrator import SessionResponse
 
 
 def test_session_response_has_latency_ms_field():

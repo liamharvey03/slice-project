@@ -4,9 +4,9 @@ E4: Tests for EvaluationRepository.
 import pytest
 from datetime import datetime, timezone
 
-from slice.repositories.evaluation_repo import EvaluationRepository
-from slice.models.evaluation import ThesisEvaluationResult, EquityPoint, ScenarioImpact
-from slice.models.llm_outputs import ThesisReview
+from voyager.repositories.evaluation_repo import EvaluationRepository
+from voyager.models.evaluation import ThesisEvaluationResult, EquityPoint, ScenarioImpact
+from voyager.models.llm_outputs import ThesisReview
 
 
 def test_upsert_thesis_evaluation(evaluation_repo, sample_evaluation, sample_review):

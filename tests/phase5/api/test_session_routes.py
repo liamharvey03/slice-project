@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from src.slice.api.session_routes import router
-from src.slice.session.models import SessionResponse
+from voyager.api.session_routes import router
+from voyager.session.models import SessionResponse
 
 
 def make_app():
@@ -27,7 +27,7 @@ def test_session_step_basic(monkeypatch):
 
     # Patch method on the class (must patch the class, not instance)
     monkeypatch.setattr(
-        "src.slice.api.session_routes.SessionOrchestrator.run_session",
+        "voyager.api.session_routes.SessionOrchestrator.run_session",
         fake_run,
     )
 

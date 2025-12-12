@@ -2,9 +2,9 @@ import datetime as dt
 
 import pytest
 
-from slice.models.common import TradeType
-from slice.models.trade import Trade
-from slice.repositories.trade_repo import TradeRepository
+from voyager.models.common import TradeType
+from voyager.models.trade import Trade
+from voyager.repositories.trade_repo import TradeRepository
 
 
 # Use the first defined enum value as the default type so we don't depend on

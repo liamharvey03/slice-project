@@ -5,14 +5,14 @@ import pytest
 from fastapi.testclient import TestClient
 from unittest.mock import Mock
 
-from slice.api.main import app
-from slice.repositories.thesis_repo import ThesisRepository
-from slice.repositories.trade_repo import TradeRepository
-from slice.intelligence.context.data_access import DataAccess
-from slice.models.thesis import Thesis, ThesisExpressionLeg
-from slice.models.common import Direction, ThesisStatus
-from slice.api.deps import get_price_source_instance
-import slice.api.session_routes_e4 as routes_mod
+from voyager.api.main import app
+from voyager.repositories.thesis_repo import ThesisRepository
+from voyager.repositories.trade_repo import TradeRepository
+from voyager.intelligence.context.data_access import DataAccess
+from voyager.models.thesis import Thesis, ThesisExpressionLeg
+from voyager.models.common import Direction, ThesisStatus
+from voyager.api.deps import get_price_source_instance
+import voyager.api.session_routes_e4 as routes_mod
 
 
 class StubPriceSource:
@@ -130,10 +130,10 @@ def client(db_engine, price_source):
     app.dependency_overrides[get_price_source_instance] = lambda: price_source
     
     # Create data access with real repos
-    from slice.repositories.observation_repo import ObservationRepository
-    from slice.repositories.evaluation_repo import EvaluationRepository
-    from slice.repositories.alert_repo import AlertRepository
-    from slice.repositories.daily_summary_repo import DailySummaryRepository
+    from voyager.repositories.observation_repo import ObservationRepository
+    from voyager.repositories.evaluation_repo import EvaluationRepository
+    from voyager.repositories.alert_repo import AlertRepository
+    from voyager.repositories.daily_summary_repo import DailySummaryRepository
     
     thesis_repo = ThesisRepository(engine=db_engine)
     obs_repo = ObservationRepository(engine=db_engine)
@@ -197,10 +197,10 @@ def test_happy_path(client, test_thesis, db_engine):
     assert updated_thesis.status == ThesisStatus.ACTIVE
     
     # Check portfolio updated
-    from slice.repositories.observation_repo import ObservationRepository
-    from slice.repositories.evaluation_repo import EvaluationRepository
-    from slice.repositories.alert_repo import AlertRepository
-    from slice.repositories.daily_summary_repo import DailySummaryRepository
+    from voyager.repositories.observation_repo import ObservationRepository
+    from voyager.repositories.evaluation_repo import EvaluationRepository
+    from voyager.repositories.alert_repo import AlertRepository
+    from voyager.repositories.daily_summary_repo import DailySummaryRepository
     
     data_access = DataAccess(
         thesis_repo=ThesisRepository(engine=db_engine),

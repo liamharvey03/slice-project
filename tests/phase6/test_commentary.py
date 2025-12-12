@@ -1,7 +1,7 @@
 import pytest
 
-from slice.intelligence.commentary import CommentaryEngine
-from slice.session.models import SessionResponse
+from voyager.intelligence.commentary import CommentaryEngine
+from voyager.session.models import SessionResponse
 
 
 class FakeContextBuilder:

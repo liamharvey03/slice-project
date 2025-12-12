@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from slice.memory.workflow import ObservationMemoryWorkflow
+from voyager.memory.workflow import ObservationMemoryWorkflow
 
 
 def test_observation_ingest_and_context_smoke():

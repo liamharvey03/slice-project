@@ -1,5 +1,5 @@
 import pytest
-from slice.memory.interface import get_memory_context_for_text
+from voyager.memory.interface import get_memory_context_for_text
 
 
 def test_memory_returns_none_for_k_zero():
@@ -36,7 +36,7 @@ def test_memory_structure_when_results_exist(monkeypatch):
             return [FakeResult()]
 
     # Patch MemoryService inside the interface module
-    import slice.memory.interface as interface_module
+    import voyager.memory.interface as interface_module
     monkeypatch.setattr(interface_module, "MemoryService", lambda: FakeService())
 
     result = get_memory_context_for_text("new text", 3)

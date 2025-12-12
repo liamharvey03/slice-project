@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 from sqlalchemy import text
 
-from slice.db import get_engine, apply_phase4_schema
+from voyager.db import get_engine, apply_phase4_schema
 
 # Directory containing both "src" and "tests"
 ROOT = Path(__file__).resolve().parent.parent
@@ -18,7 +18,7 @@ def db_engine():
     """
     Session-wide database engine for integration tests.
 
-    Uses the configured SLICE_DB_URL via get_engine() and applies the core schema
+    Uses the configured VOYAGER_DB_URL via get_engine() and applies the core schema
     once at the beginning of the test session.
     """
     engine = get_engine()

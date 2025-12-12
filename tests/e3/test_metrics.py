@@ -8,7 +8,7 @@ Verifies:
 """
 import pytest
 
-from slice.llm.metrics import (
+from voyager.llm.metrics import (
     LLMToolStats,
     llm_stats,
     record_llm_call,

@@ -1,6 +1,6 @@
 from typing import List
 
-from slice.intelligence.context.data_access import DataAccess
+from voyager.intelligence.context.data_access import DataAccess
 
 
 class FakeTrade:

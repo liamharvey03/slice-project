@@ -1,7 +1,7 @@
 import pytest
 
-from slice.intelligence.thesis_consistency import ThesisConsistencyChecker
-from slice.session.models import SessionResponse
+from voyager.intelligence.thesis_consistency import ThesisConsistencyChecker
+from voyager.session.models import SessionResponse
 
 
 class FakeContextBuilder:

@@ -1,8 +1,8 @@
 import math
 
-from slice.intelligence.context.portfolio_adapter import build_portfolio_snapshot
-from slice.intelligence.context.concentration import compute_concentration
-from slice.intelligence.context.factors import compute_factor_exposures
+from voyager.intelligence.context.portfolio_adapter import build_portfolio_snapshot
+from voyager.intelligence.context.concentration import compute_concentration
+from voyager.intelligence.context.factors import compute_factor_exposures
 
 
 def test_concentration_and_factors_end_to_end():

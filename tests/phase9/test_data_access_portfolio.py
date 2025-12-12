@@ -1,7 +1,7 @@
 import pytest
 
-from slice.intelligence.context.data_access import DataAccess
-from slice.models.portfolio import PortfolioSnapshot, PortfolioDepthSnapshot
+from voyager.intelligence.context.data_access import DataAccess
+from voyager.models.portfolio import PortfolioSnapshot, PortfolioDepthSnapshot
 
 
 # --- Helper fakes -----------------------------------------------------------

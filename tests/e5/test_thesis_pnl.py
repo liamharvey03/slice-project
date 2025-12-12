@@ -4,11 +4,11 @@ E5: Unit tests for DataAccess.get_thesis_pnl() helper.
 import pytest
 from datetime import datetime
 
-from slice.intelligence.context.data_access import DataAccess
-from slice.models.execution import ThesisPnL
-from slice.models.trade import Trade
-from slice.models.common import TradeType
-from slice.repositories.trade_repo import TradeRepository
+from voyager.intelligence.context.data_access import DataAccess
+from voyager.models.execution import ThesisPnL
+from voyager.models.trade import Trade
+from voyager.models.common import TradeType
+from voyager.repositories.trade_repo import TradeRepository
 
 
 class StubPriceSource:

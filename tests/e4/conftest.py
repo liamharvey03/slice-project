@@ -5,13 +5,13 @@ import pytest
 from datetime import date, datetime, timezone
 from sqlalchemy import text
 
-from slice.db import get_engine
-from slice.repositories.evaluation_repo import EvaluationRepository
-from slice.repositories.alert_repo import AlertRepository
-from slice.repositories.daily_summary_repo import DailySummaryRepository
-from slice.models.evaluation import ThesisEvaluationResult, EquityPoint, ScenarioImpact
-from slice.models.llm_outputs import ThesisReview, DailySummary
-from slice.models.llm_inputs import Alert
+from voyager.db import get_engine
+from voyager.repositories.evaluation_repo import EvaluationRepository
+from voyager.repositories.alert_repo import AlertRepository
+from voyager.repositories.daily_summary_repo import DailySummaryRepository
+from voyager.models.evaluation import ThesisEvaluationResult, EquityPoint, ScenarioImpact
+from voyager.models.llm_outputs import ThesisReview, DailySummary
+from voyager.models.llm_inputs import Alert
 
 
 @pytest.fixture(scope="function")
@@ -19,7 +19,7 @@ def e4_tables(db_engine):
     """
     Ensure E4 tables exist and clean them before/after each test.
     """
-    from slice.db import apply_e4_schema
+    from voyager.db import apply_e4_schema
     
     # Apply E4 schema (idempotent)
     apply_e4_schema()

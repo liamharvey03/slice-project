@@ -2,9 +2,9 @@ import datetime as dt
 
 import pytest
 
-from slice.models.thesis import Thesis, ThesisStatus, ThesisExpressionLeg
-from slice.models.common import Direction
-from slice.repositories.thesis_repo import ThesisRepository
+from voyager.models.thesis import Thesis, ThesisStatus, ThesisExpressionLeg
+from voyager.models.common import Direction
+from voyager.repositories.thesis_repo import ThesisRepository
 
 
 @pytest.mark.usefixtures("clean_core_tables")
